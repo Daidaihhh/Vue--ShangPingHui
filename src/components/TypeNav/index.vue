@@ -5,18 +5,23 @@
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <div 
+            class="all-sort-list2"
+            @click="goSearch">
             <!-- 一级分类 -->
             <div
               class="item"
-           v-for="(c1, index) in categoryList"
+              v-for="(c1, index) in categoryList"
               :key="c1.categoryId"
                :class="{ cur: currentIndex == index }"
             >
               <h3
                 @mouseenter="changeIndex(index)"
               >
-                <a href="">{{ c1.categoryName }}</a>
+                <a 
+                :data-categoryName="c1.categoryName" 
+                :data-category1Id="c1.categoryId"
+                >{{ c1.categoryName }}</a>
               </h3>
               <!-- 二三级分类 -->
               <div
@@ -30,7 +35,10 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a 
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a>
                     </dt>
                     <dd>
                       <!-- 三级分类 -->
@@ -38,7 +46,10 @@
                           v-for="c3 in c2.categoryChild"
                           :key="c3.categoryId"
                         >
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a 
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a>
                       </em>
                     </dd>
                   </dl>
@@ -64,6 +75,12 @@
 
 <script>
 import { mapState } from "vuex";
+// 引入：是将lodash全部功能函数都引入
+// import _ from 'lodash';
+
+// 按需引入
+import throttle from "lodash/throttle"
+
 export default {
   name: "TypeNav",
   data() {
@@ -72,11 +89,41 @@ export default {
     };
   },
   methods:{
-    changeIndex(index){
-      this.currentIndex = index
-    },
+    // changeIndex(index){
+    //   this.currentIndex = index
+    // },
+
+    changeIndex:throttle(function(index) {
+      this.currentIndex = index;
+    },50),
+
     leaveIndex() {
        this.currentIndex = -1;
+    },
+
+    goSearch() {
+      // 1.把a标签加上自定义属性，其他节点没有
+      let element = event.target;
+      let {categoryname,category1id,category2id,category3id} = element.dataset;
+      
+      if(categoryname) {
+        let location = {name:"search"};
+        let query = {categoryName:categoryname};
+        if(category1id){
+          query.category1id = category1id;
+        }else if(category2id) {
+          query.category2id = category2id;
+        }else{
+            query.category3id = category3id;
+        }
+        // 整理参数
+        location.query = query;
+        // 路由跳转
+        this.$router.push(location);
+
+      }
+
+      
     }
   },
 

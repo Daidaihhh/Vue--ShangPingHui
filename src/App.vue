@@ -18,6 +18,11 @@ export default {
   components: {
    Header,
    Footer
+  },
+  mounted() {
+    // 通知Vuex发请求，回去数据，存储在仓库中
+    // 获取商品三级分类的数据
+    this.$store.dispatch("categoryList");
   }
 }
 </script>

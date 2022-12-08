@@ -10,6 +10,12 @@ import Search from '@/pages/Search';
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+
 // 配置
 export default new VueRouter({
   // 配置路由
@@ -20,7 +26,7 @@ export default new VueRouter({
       meta: { show: true },
     },
     {
-      path: "/search/:keyword?",
+      path: "/search:keyword?",
       component: Search,
       meta: { show: true },
       name:"search"

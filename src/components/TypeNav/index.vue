@@ -1,10 +1,13 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="leaveIndex">
+      <div @mouseleave="leaveShow" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
+
+        <!-- 过渡动画 -->
+      <transition name="sort">
         <!-- 三级联动 -->
-        <div class="sort">
+        <div class="sort" v-show="show">
           <div 
             class="all-sort-list2"
             @click="goSearch">
@@ -58,6 +61,8 @@
             </div>
           </div>
         </div>
+      </transition>
+
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -75,8 +80,6 @@
 
 <script>
 import { mapState } from "vuex";
-// 引入：是将lodash全部功能函数都引入
-// import _ from 'lodash';
 
 // 按需引入
 import throttle from "lodash/throttle"
@@ -86,22 +89,24 @@ export default {
   data() {
     return {
       currentIndex:-1,
+      show: true,
     };
   },
   methods:{
-    // changeIndex(index){
-    //   this.currentIndex = index
-    // },
-
     changeIndex:throttle(function(index) {
       this.currentIndex = index;
     },50),
 
-    leaveIndex() {
-       this.currentIndex = -1;
+    leaveShow() {
+      this.currentIndex = -1;
+      // 判断如果是Search路由组件时，才会执行；
+      if(this.$route.path != '/home') {
+      //  鼠标离开，分类隐藏
+       this.show = false;
+      } 
     },
 
-    goSearch() {
+    goSearch(event) {
       // 1.把a标签加上自定义属性，其他节点没有
       let element = event.target;
       let {categoryname,category1id,category2id,category3id} = element.dataset;
@@ -116,21 +121,30 @@ export default {
         }else{
             query.category3id = category3id;
         }
-        // 整理参数
+
+        // 判断：路由跳转时，带有params参数，一起带过去
+        if (this.$route.params) {
+          location.params = this.$route.params;
+          // 整理参数
         location.query = query;
         // 路由跳转
         this.$router.push(location);
+        }
 
       }
-
-      
+    },
+    // 当鼠标移入时，商品分类show
+    enterShow() {
+      this.show = true;
     }
   },
 
   // 组件挂载完毕：可以向服务器发送请求
   mounted() {
-    // 通知Vuex发请求，回去数据，存储在仓库中
-    this.$store.dispatch("categoryList");
+    // 当组件挂载完毕，show属性变化
+    if(this.$route.path != '/home'){
+      this.show = false;
+    } 
   },
   computed: {
     ...mapState({
@@ -257,6 +271,17 @@ export default {
         }
       }
     }
+    // 过渡动画的样式
+      .sort-enter{
+        height: 0px;
+      }
+      .sort-enter-to{
+        height: 461px;
+      }
+      .sort-enter-active{
+        transition: all .5s linear;
+      }
+
   }
 }
 </style>

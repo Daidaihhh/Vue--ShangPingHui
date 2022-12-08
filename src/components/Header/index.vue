@@ -38,6 +38,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyword"
           />
           <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
             搜索
@@ -51,11 +52,24 @@
 <script>
 export default {
     name:"",
+    data() {
+      return {
+      //收集用户输入的关键字
+      keyword: "",
+    };
+    },
     methods: {
-        goSearch() {
-            // this.$router.push('/search')
-            this.$router.push({name:"search",params:{keyword:this.keyword},query:{k:this.keyword.toUppercase}})
-        }
+      goSearch() {
+        let locations = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+        };
+        //确定路径当中有query参数
+        if (this.$route.query) {
+          locations.query = this.$route.query;
+        };
+          this.$router.push(locations);
+      }
     },
 };
 </script>

@@ -2,16 +2,16 @@
   <div class="floor">
     <div class="py-container">
       <div class="title clearfix">
-        <h3 class="fl">{{list.name}}</h3>
+        <h3 class="fl">{{ list.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li 
-            :class="{active:index == 0}" 
-            v-for="(nav,index) in list.navList"
-            :key="index">
-              <a href="#tab1" data-toggle="tab">{{nav.text}}</a>
+            <li
+              :class="{ active: index == 0 }"
+              v-for="(nav, index) in list.navList"
+              :key="index"
+            >
+              <a href="#tab1" data-toggle="tab">{{ nav.text }}</a>
             </li>
-            
           </ul>
         </div>
       </div>
@@ -20,33 +20,15 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li 
-                v-for="(keyword,index) in list.keywords"
-                :key="index">
-                {{keyword}}
-              </li>
+                <li v-for="(keyword, index) in list.keywords" :key="index">
+                  {{ keyword }}
+                </li>
               </ul>
               <img :src="list.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
-                <div class="swiper-wrapper">
-                  <div 
-                  class="swiper-slide"
-                  v-for="(carousel, index) in list.carouselList"
-                    :key="carousel.id"
-                  >
-                    <img :src="carousel.imgUrl"/>
-                  </div>
-                  
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <!-- 轮播图 -->
+              <Carousel :list="list.carouselList"/>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -58,15 +40,15 @@
               </div>
             </div>
             <div class="split center">
-               <img :src="list.bigImg" />
+              <img :src="list.bigImg" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-               <img :src="list.recommendList[2]" />
+                <img :src="list.recommendList[2]" />
               </div>
               <div class="floor-conver-pit">
-                 <img :src="list.recommendList[3]" />
+                <img :src="list.recommendList[3]" />
               </div>
             </div>
           </div>
@@ -77,26 +59,13 @@
 </template>
 
 <script>
-import Swiper from "swiper";
 export default {
-  name: "",
-  props:["list"],
+  name: "Floor",
+  props: ["list"],
   mounted() {
-    // 这个组件可以使用mounted：因为请求是父组件发的，通过props传递过来，结构都已经有了，再执行mounted
-    var mySwiper = new Swiper(document.querySelectorAll(".swiper-container"), {
-      loop: true, // 循环模式选项
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true, //点击小球的时候也切换图片
-      },
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
+    
   }
+  
 };
 </script>
 

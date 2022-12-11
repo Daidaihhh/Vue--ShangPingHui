@@ -71,6 +71,11 @@ export default {
           this.$router.push(locations);
       }
     },
+    mounted(){
+      this.$bus.$on("clear",()=>{
+        this.keyword = ''
+      })
+    }
 };
 </script>
 

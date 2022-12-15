@@ -4,11 +4,13 @@ import { reqGetSearchInfo } from "@/api";
 const state = {
   searchList:{},
 };
+
 const mutations = {
   GETSEARCHLIST(state,searchList){
     state.searchList = searchList;
   }
 };
+
 const actions = {
     async getSearchList({commit},params = {}) {
       let result = await reqGetSearchInfo(params);
@@ -17,6 +19,7 @@ const actions = {
       }
     }
 };
+
 // 相当于计算属性，getters为了简化数据
 const getters = {
   // 当前形参state是这个小仓库的state

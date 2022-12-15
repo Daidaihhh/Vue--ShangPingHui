@@ -43,9 +43,11 @@ import { mapGetters } from 'vuex';
       ...mapGetters(['trademarkList','attrsList']),
     },
     methods:{
+      // 全局事件总线写法
       trademarkHandler(trademark) {
         this.$emit('trademarkInfo',trademark)
       },
+      // 处理品牌信息——自定义事件
       attrInfo(attr,attrValue) {
       this.$emit("attrInfo",attr,attrValue)
     },

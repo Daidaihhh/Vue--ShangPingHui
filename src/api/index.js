@@ -4,6 +4,7 @@ import mockRequests from './mockAjax';
 
 //发请求：axios发请求返回结果Promise对象
 export const reqCategoryList = () => requests.get("/product/getBaseCategoryList");
+
 //获取banner（Home首页轮播图接口）
 export const reqGetBannerList = () => mockRequests.get("/banner");
 

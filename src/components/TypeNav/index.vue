@@ -83,7 +83,6 @@ import { mapState } from "vuex";
 
 // 按需引入
 import throttle from "lodash/throttle"
-
 export default {
   name: "TypeNav",
   data() {
@@ -105,7 +104,6 @@ export default {
        this.show = false;
       } 
     },
-
     goSearch(event) {
       // 1.把a标签加上自定义属性，其他节点没有
       let element = event.target;
@@ -126,11 +124,10 @@ export default {
         if (this.$route.params) {
           location.params = this.$route.params;
           // 整理参数
-        location.query = query;
-        // 路由跳转
-        this.$router.push(location);
-        }
-
+          location.query = query;
+          // 路由跳转
+          this.$router.push(location);
+          }
       }
     },
     // 当鼠标移入时，商品分类show

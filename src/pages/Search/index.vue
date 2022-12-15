@@ -48,23 +48,12 @@
             <div class="navbar-inner filter">
               <!-- 价格结构 -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active:isOne}" @click="changeOrder('1')">
+                  <!-- -1表示未匹配到 -->
+                  <a >综合<span v-if="isOne" class="iconfont" :class="{'icon-up':isAsc,'icon-down':isDesc}"></span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:isTwo}" @click="changeOrder('2')">
+                  <a >价格<span v-if="isTwo" class="iconfont" :class="{'icon-up':isAsc,'icon-down':isDesc}"></span></a>
                 </li>
               </ul>
             </div>
@@ -169,7 +158,7 @@ export default {
         categoryName: '', // 分类名称
         trademark: '', // 品牌  "ID:品牌名称"
         props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
-        order: '', // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
+        order: '1:asc', // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
         pageNo: 1, // 当前页码
         pageSize: 5, // 每页数量
         keyword:""  //关键字
@@ -183,8 +172,20 @@ export default {
     this.getData();
   },
   computed: {
-    ...mapGetters(['goodsList','trademarkList','attrsList'])
+    ...mapGetters(['goodsList','trademarkList','attrsList']),
+    isOne() {
+      return this.searchParams.order.indexOf('1') != -1
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf('2') != -1
+    },
+    isAsc() {
+      return this.searchParams.order.indexOf('asc') != -1
+    },
+    isDesc() {
+      return this.searchParams.order.indexOf('desc') != -1
   },
+},
   methods:{
     // 向服务器发请求获取search模块数据（根据参数不同返回不停的数据进行展示）
     getData() {
@@ -213,7 +214,6 @@ export default {
       if(this.$route.query) {
         this.$router.push({name:'search',query:this.$route.query})
       }
-      
     },
     // 子给父传数据，父组件自定义事件回调
     trademarkInfo(trademark){
@@ -240,6 +240,24 @@ export default {
     removeAttr(index) {
       this.searchParams.props.splice(index,1);
       this.getData()
+    },
+    // 排序的操作
+    changeOrder(flag) {
+      // flag形参——代表用户点击的是综合还是价格
+      let originOrder = this.searchParams.order;
+      // originFlag代表传进来的是1或者2，originSort代表升序还是降序
+      let originFlag = this.searchParams.order.split(':')[0];
+      let originSort = this.searchParams.order.split(':')[1];
+      let newOrder = ''
+      // 如果点击的按钮相同（就是综合）
+      if(flag == originFlag){
+        newOrder = `${originFlag}:${originSort=='desc'? 'asc':'desc'}`
+      }else{
+        // 点击的按钮不同（价格）
+      newOrder = `${flag}:${'desc'}`
+      }
+      this.searchParams.order = newOrder
+      this.getData()
     }
   },
   watch:{
@@ -253,14 +271,15 @@ export default {
       Object.assign(this.searchParams,this.$route.query,this.$route.params)
       this.getData();
     }
+  },
   }
-};
+
 </script>
 
 <style lang="less" scoped>
 .main {
   margin: 10px 0;
-
+  
   .py-container {
     width: 1200px;
     margin: 0 auto;

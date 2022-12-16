@@ -105,7 +105,13 @@
           </div>
 
           <!-- 分页器 -->
-          <Pagination/>
+          <Pagination 
+          :pageNow="searchParams.pageNow" 
+          :pageSize="searchParams.pageSize" 
+          :total="total" 
+          :continues="5"
+          @getPageNow = "getPageNow"
+          />
         </div>
       </div>
     </div>
@@ -114,7 +120,7 @@
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
-import { mapGetters } from "vuex";
+import { mapGetters,mapState} from "vuex";
 
 export default {
   name: "Search",
@@ -131,7 +137,7 @@ export default {
         trademark: '', // 品牌  "ID:品牌名称"
         props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
         order: '1:asc', // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
-        pageNo: 1, // 当前页码
+        pageNow: 1, // 当前页码
         pageSize: 5, // 每页数量
         keyword:""  //关键字
       }
@@ -156,7 +162,11 @@ export default {
     },
     isDesc() {
       return this.searchParams.order.indexOf('desc') != -1
-  },
+    },
+    // 获取search模块一共多少数据total
+    ...mapState({
+      total:state=>state.search.searchList.total
+    })
 },
   methods:{
     // 向服务器发请求获取search模块数据（根据参数不同返回不停的数据进行展示）
@@ -230,8 +240,13 @@ export default {
       }
       this.searchParams.order = newOrder
       this.getData()
-    }
+    },
+    // 自定义事件的回调函数——获取当前第几页
+    getPageNow(pageNow){
+      this.searchParams.pageNow = pageNow;
+      this.getData()
   },
+},
   watch:{
     // 监听路由信息是否发生变化，如果发生变化，再次发起请求；
     $route(newValue,oldValue) {
@@ -244,6 +259,7 @@ export default {
       this.getData();
     }
   },
+
   }
 
 </script>

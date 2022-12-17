@@ -33,8 +33,7 @@ requests.interceptors.response.use((res)=>{
 
   return res.data
 },
-(err)=>{
-    alert(err.message);
+(error)=>{
     // 响应失败的回调函数
     return Promise.reject(new Error('faile'))
 

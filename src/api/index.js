@@ -22,3 +22,12 @@ export const reqGetSearchInfo = (params) => {
     })
 }
 
+// 产品详情detail的接口
+export const reqGoodsInfo = (skuId) =>requests({
+      url: `/item/${skuId}`,
+      method: 'get'
+    });
+
+
+
+

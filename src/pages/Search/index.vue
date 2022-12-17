@@ -67,9 +67,10 @@
                 :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
-                      <img :src="good.defaultImg"/>
-                    </a>
+                    <!-- 在路由跳转的时候带id（params）参数 -->
+                    <router-link :to="`/detail/${good.id}`">
+                       <img :src="good.defaultImg"/>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>

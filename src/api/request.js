@@ -32,7 +32,7 @@ requests.interceptors.response.use((res)=>{
     nprogress.done()
   return res.data
 },
-(error)=>{
+(err)=>{
     // 响应失败的回调函数
     return Promise.reject(new Error('faile'))
 

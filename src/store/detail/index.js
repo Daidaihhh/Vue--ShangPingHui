@@ -20,13 +20,13 @@ const getters = {
   categoryView(state) {
     //比如：state.goodInfo初始状态空对象，空对象的categoryview属性值undefined
     //当前计算出的categoryview属性值至少是一个空对象，假的报错不会有了。|
-    return state.goodIofo.categoryView || {};
+    return state.goodInfo.categoryView || {};
   },
   skuInfo(state) {
-    return state.goodIofo.skuInfo || {};
+    return state.goodInfo.skuInfo || {};
   },
   spuSaleAttrList(state) {
-    return state.goodIofo.spuSaleAttrList || [];
+    return state.goodInfo.spuSaleAttrList || [];
   },
 };
 

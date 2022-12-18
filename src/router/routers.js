@@ -7,7 +7,7 @@ import Detail from "@/pages/Detail";
 
 export default [
   {
-    path: "/detail/:skuid",
+    path: "/detail/:skuId",
     component: Detail,
     meta: { show: true },
   },
